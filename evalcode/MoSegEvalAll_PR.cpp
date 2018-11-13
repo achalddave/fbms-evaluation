@@ -4,6 +4,8 @@
 #include <CVector.h>
 #include <CMatrix.h>
 
+#define MAX_LINE_LENGTH 99999
+
 int main(int argc, char* args[]) {
   if (argc <= 3) {
     std::cout << "Usage: MoSegEvalAll_PR shotList.txt 10|50|200|all trackList.txt" << std::endl;
@@ -28,7 +30,7 @@ int main(int argc, char* args[]) {
     std::cerr << "Evaluation of " << args[2] << " frames is not allowed. Choose 10, 50, 200, or all frames." << std::endl;
     return -1;
   }
-  char dummy[300];
+  char dummy[MAX_LINE_LENGTH];
   float objectThreshold = 0.9f;
   if (argc >= 5)
     objectThreshold = atof(args[4]);
@@ -52,7 +54,7 @@ int main(int argc, char* args[]) {
   int aSumExtracted = 0;
   int aSumVisibles = 0;
   int aSize;
-  aShotList >> aSize; aShotList.getline(dummy,300);
+  aShotList >> aSize; aShotList.getline(dummy,MAX_LINE_LENGTH);
   int aCounter = 0;
   for (int shot = 0; shot < aSize; shot++) {
     // Read parts of the definition file ---------------------------------------
@@ -63,21 +65,21 @@ int main(int argc, char* args[]) {
       std::cerr << "Definition file " << aShotLine << "  not found." << std::endl;
       return -1;
     }
-    aPropFile.getline(dummy,300);
-    aPropFile.getline(dummy,300);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
     // Number of regions
-    aPropFile.getline(dummy,300);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
     int aRegionNo;
-    aPropFile >> aRegionNo; aPropFile.getline(dummy,300);
+    aPropFile >> aRegionNo; aPropFile.getline(dummy,MAX_LINE_LENGTH);
     // Number of frames
     for (int i = 0; i < 3*aRegionNo; i++)
-      aPropFile.getline(dummy,300);
-    aPropFile.getline(dummy,300);
-    aPropFile.getline(dummy,300);
-    aPropFile.getline(dummy,300);
-    aPropFile.getline(dummy,300);
+      aPropFile.getline(dummy,MAX_LINE_LENGTH);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
     int aTotalFrameNo;
-    aPropFile >> aTotalFrameNo; aPropFile.getline(dummy,300);
+    aPropFile >> aTotalFrameNo; aPropFile.getline(dummy,MAX_LINE_LENGTH);
     // Ignore this shot if it does not have the required number of frames
     if (aEvaluationMode > 0 && aTotalFrameNo < aEvaluationMode) {
       std::cout << "Only " << aTotalFrameNo << " frames. " << aShotLine << " ignored." << std::endl;
@@ -105,13 +107,13 @@ int main(int argc, char* args[]) {
     s = aTrackLine;
     s.erase(s.find_last_of('.'),s.length());
     std::ifstream aResult((s+"Numbers.txt").c_str());
-    aResult.getline(dummy,300);
-    aResult.getline(dummy,300);
-    aResult.getline(dummy,300);
+    aResult.getline(dummy,MAX_LINE_LENGTH);
+    aResult.getline(dummy,MAX_LINE_LENGTH);
+    aResult.getline(dummy,MAX_LINE_LENGTH);
     // Number of evaluated frames
     int aEvaluatedFrames;
-    aResult.getline(dummy,300);
-    aResult >> aEvaluatedFrames; aResult.getline(dummy,300);
+    aResult.getline(dummy,MAX_LINE_LENGTH);
+    aResult >> aEvaluatedFrames; aResult.getline(dummy,MAX_LINE_LENGTH);
     if (aEvaluatedFrames != aEvaluationMode && aEvaluationMode > 0) {
       std::cerr << "The tracks listed in " << args[3] << " have been computed considering different numbers of frames." << std::endl;
       return -1;
@@ -120,19 +122,19 @@ int main(int argc, char* args[]) {
     std::string sdummy = "";
     int error_counter = 0;
     while (sdummy.find("Average region density") == std::string::npos) {
-      aResult.getline(dummy,300);
+      aResult.getline(dummy,MAX_LINE_LENGTH);
       sdummy = std::string(dummy);
       error_counter ++;
       if (error_counter > 500) { std::cerr << "Could not find \"Average region density\" in the file!" << std::endl; return -1; }
     }
     float aAvrgDensity;
-    aResult >> aAvrgDensity; aResult.getline(dummy,300);
+    aResult >> aAvrgDensity; aResult.getline(dummy,MAX_LINE_LENGTH);
     aSumAvrgDensity += aAvrgDensity;
     // >>> Average Precision Recall F-measure <<<
     sdummy = "";
     error_counter = 0;
     while (sdummy.find("Average Precision, Recall, F-measure") == std::string::npos) {
-      aResult.getline(dummy,300);
+      aResult.getline(dummy,MAX_LINE_LENGTH);
       sdummy = std::string(dummy);
       error_counter ++;
       if (error_counter > 500) { std::cerr << "Could not find \"Average Precision, Recall, F-measure\" in the file!" << std::endl; return -1; }
@@ -150,19 +152,19 @@ int main(int argc, char* args[]) {
     sdummy = "";
     error_counter = 0;
     while (sdummy.find("Visible objects") == std::string::npos) {
-      aResult.getline(dummy,300);
+      aResult.getline(dummy,MAX_LINE_LENGTH);
       sdummy = std::string(dummy);
       error_counter ++;
       if (error_counter > 500) { std::cerr << "Could not find \"Visible objects\" in the file!" << std::endl; return -1; }
     }
     int aVisibles;
-    aResult >> aVisibles; aResult.getline(dummy,300);
+    aResult >> aVisibles; aResult.getline(dummy,MAX_LINE_LENGTH);
     aSumVisibles += aVisibles;
     // >>> Extracted objects <<<
     sdummy = "";
     error_counter = 0;
     while (sdummy.find("Extracted objects") == std::string::npos) {
-      aResult.getline(dummy,300);
+      aResult.getline(dummy,MAX_LINE_LENGTH);
       error_counter ++;
       sdummy = std::string(dummy);
       if (error_counter > 500) { std::cerr << "Could not find \"Extracted objects\" in the file!" << std::endl; return -1; }

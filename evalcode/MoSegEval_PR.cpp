@@ -24,7 +24,7 @@ const int mGray[40] = {  0,255,155, 40,200,100,175,220, 10, 20, 70, 80, 90,110,1
 /* ----------------------------------------------------------------------------------------- */
 /* ----------------------------------------------------------------------------------------- */
 
-
+#define MAX_LINE_LENGTH 99999
 
 
 using namespace std;
@@ -160,43 +160,43 @@ int main(int argc, char* args[]) {
     return -1;
   }
   // Read header
-  char dummy[300];
-  aPropFile.getline(dummy,300);
-  aPropFile.getline(dummy,300);
+  char dummy[MAX_LINE_LENGTH];
+  aPropFile.getline(dummy,MAX_LINE_LENGTH);
+  aPropFile.getline(dummy,MAX_LINE_LENGTH);
   // Number of regions
-  aPropFile.getline(dummy,300);
-  aPropFile >> mRegionNo; aPropFile.getline(dummy,300);
+  aPropFile.getline(dummy,MAX_LINE_LENGTH);
+  aPropFile >> mRegionNo; aPropFile.getline(dummy,MAX_LINE_LENGTH);
   mColor2Region.setSize(16777216);
   CMatrix<float> aPenalty(mRegionNo,mRegionNo);
   // Region color
   for (int i = 0; i < mRegionNo; i++) {
-    aPropFile.getline(dummy,300);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
     int a;
-    aPropFile >> a; aPropFile.getline(dummy,300);
+    aPropFile >> a; aPropFile.getline(dummy,MAX_LINE_LENGTH);
     mColor2Region(a) = i;
   }
   // Confusion penalty matrix
-  aPropFile.getline(dummy,300);
-  aPropFile.getline(dummy,300);
+  aPropFile.getline(dummy,MAX_LINE_LENGTH);
+  aPropFile.getline(dummy,MAX_LINE_LENGTH);
   for (int j = 0; j < mRegionNo; j++)
     for (int i = 0; i < mRegionNo; i++)
       aPropFile >> aPenalty(i,j);
   // Number of frames in shot
-  aPropFile.getline(dummy,300);
-  aPropFile.getline(dummy,300);
-  aPropFile.getline(dummy,300);
-  aPropFile >> mTotalFrameNo; aPropFile.getline(dummy,300);
+  aPropFile.getline(dummy,MAX_LINE_LENGTH);
+  aPropFile.getline(dummy,MAX_LINE_LENGTH);
+  aPropFile.getline(dummy,MAX_LINE_LENGTH);
+  aPropFile >> mTotalFrameNo; aPropFile.getline(dummy,MAX_LINE_LENGTH);
   // Number of labeled frames
-  aPropFile.getline(dummy,300);
-  aPropFile >> mLabeledFramesNo; aPropFile.getline(dummy,300);
+  aPropFile.getline(dummy,MAX_LINE_LENGTH);
+  aPropFile >> mLabeledFramesNo; aPropFile.getline(dummy,MAX_LINE_LENGTH);
   mLabeledFrames.setSize(mLabeledFramesNo);
   mRegions.setSize(mLabeledFramesNo);
   mRegionsProb.setSize(mLabeledFramesNo);
   // Read frame number and annotation
   for (int i = 0; i < mLabeledFramesNo; i++) {
-    aPropFile.getline(dummy,300);
-    aPropFile >> mLabeledFrames(i); aPropFile.getline(dummy,300);
-    aPropFile.getline(dummy,300);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
+    aPropFile >> mLabeledFrames(i); aPropFile.getline(dummy,MAX_LINE_LENGTH);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
     std::string s;
     aPropFile >> s;
     std::string ending = s;
@@ -229,9 +229,9 @@ int main(int argc, char* args[]) {
         std::cerr << "Error while reading ground truth file: " << " wrong ending" << std::endl;
       }
     }
-    aPropFile.getline(dummy,300);
-    aPropFile.getline(dummy,300);
-    aPropFile.getline(dummy,300);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
+    aPropFile.getline(dummy,MAX_LINE_LENGTH);
   }
   // Read tracks ---------------------------------------------------------------
   if (!readTracks(args[2])) return -1;
