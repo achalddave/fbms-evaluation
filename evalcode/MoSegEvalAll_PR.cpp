@@ -120,24 +120,24 @@ int main(int argc, char* args[]) {
     }
     // >>> avergae region Densities <<<
     std::string sdummy = "";
-    int error_counter = 0;
     while (sdummy.find("Average region density") == std::string::npos) {
-      aResult.getline(dummy,MAX_LINE_LENGTH);
+      if (!aResult.getline(dummy,MAX_LINE_LENGTH)) {
+        std::cerr << "Could not find \"Average region density\" in the file!" << std::endl;
+        return -1;
+      }
       sdummy = std::string(dummy);
-      error_counter ++;
-      if (error_counter > 500) { std::cerr << "Could not find \"Average region density\" in the file!" << std::endl; return -1; }
     }
     float aAvrgDensity;
     aResult >> aAvrgDensity; aResult.getline(dummy,MAX_LINE_LENGTH);
     aSumAvrgDensity += aAvrgDensity;
     // >>> Average Precision Recall F-measure <<<
     sdummy = "";
-    error_counter = 0;
     while (sdummy.find("Average Precision, Recall, F-measure") == std::string::npos) {
-      aResult.getline(dummy,MAX_LINE_LENGTH);
+      if (!aResult.getline(dummy,MAX_LINE_LENGTH)) {
+        std::cerr << "Could not find \"Average Precision, Recall, F-measure\" in the file!" << std::endl;
+        return -1;
+      }
       sdummy = std::string(dummy);
-      error_counter ++;
-      if (error_counter > 500) { std::cerr << "Could not find \"Average Precision, Recall, F-measure\" in the file!" << std::endl; return -1; }
     }
     float aAvrgPrecision;
     float aAvrgRecall;
@@ -150,24 +150,24 @@ int main(int argc, char* args[]) {
     aSumAvrgRecallSq += aAvrgRecall*aAvrgRecall;
     // >>> visibile count <<< 
     sdummy = "";
-    error_counter = 0;
     while (sdummy.find("Visible objects") == std::string::npos) {
-      aResult.getline(dummy,MAX_LINE_LENGTH);
+      if (!aResult.getline(dummy,MAX_LINE_LENGTH)) {
+        std::cerr << "Could not find \"Visible objects\" in the file!" << std::endl;
+        return -1;
+      }
       sdummy = std::string(dummy);
-      error_counter ++;
-      if (error_counter > 500) { std::cerr << "Could not find \"Visible objects\" in the file!" << std::endl; return -1; }
     }
     int aVisibles;
     aResult >> aVisibles; aResult.getline(dummy,MAX_LINE_LENGTH);
     aSumVisibles += aVisibles;
     // >>> Extracted objects <<<
     sdummy = "";
-    error_counter = 0;
     while (sdummy.find("Extracted objects") == std::string::npos) {
-      aResult.getline(dummy,MAX_LINE_LENGTH);
-      error_counter ++;
+      if (!aResult.getline(dummy,MAX_LINE_LENGTH)) {
+         std::cerr << "Could not find \"Extracted objects\" in the file!" << std::endl;
+         return -1;
+      }
       sdummy = std::string(dummy);
-      if (error_counter > 500) { std::cerr << "Could not find \"Extracted objects\" in the file!" << std::endl; return -1; }
     }
     int aExtracted;
     aResult >> aExtracted;
