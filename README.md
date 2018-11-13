@@ -25,4 +25,4 @@ publication:
 
 Peter Ochs, Jitendra Malik, Thomas Brox
 Segmentation of moving objects by long term video analysis
-IEEE Transactions on Pattern Analysis and Machine Intelligence, preprint, 2013.
+IEEE Transactions on Pattern Analysis and Machine Intelligence, 2014.
